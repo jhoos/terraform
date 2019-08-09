@@ -40,6 +40,11 @@ func (b *Block) DecoderSpec() hcldec.Spec {
 		if blockS.MinItems > 1 {
 			minItems = 1
 		}
+		// We can't validate MaxItems yet, because there could be, for example,
+		// two dynamic blocks declaring a block that has MaxItems=1, but after
+		// those dynamic blocks are resolved only one of them will actually
+		// result in a valid block.
+		maxItems := 0
 
 		switch blockS.Nesting {
 		case NestingSingle, NestingGroup:
@@ -66,14 +71,14 @@ func (b *Block) DecoderSpec() hcldec.Spec {
 					TypeName: name,
 					Nested:   childSpec,
 					MinItems: minItems,
-					MaxItems: blockS.MaxItems,
+					MaxItems: maxItems,
 				}
 			} else {
 				ret[name] = &hcldec.BlockListSpec{
 					TypeName: name,
 					Nested:   childSpec,
 					MinItems: minItems,
-					MaxItems: blockS.MaxItems,
+					MaxItems: maxItems,
 				}
 			}
 		case NestingSet:

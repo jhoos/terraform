@@ -119,7 +119,7 @@ func (b *Block) coerceValue(in cty.Value, path cty.Path) (cty.Value, error) {
 				if l < blockS.MinItems && coll.IsWhollyKnown() {
 					return cty.UnknownVal(b.ImpliedType()), path.NewErrorf("insufficient items for attribute %q; must have at least %d", typeName, blockS.MinItems)
 				}
-				if l > blockS.MaxItems && blockS.MaxItems > 0 {
+				if l > blockS.MaxItems && blockS.MaxItems > 0 && coll.IsWhollyKnown() {
 					return cty.UnknownVal(b.ImpliedType()), path.NewErrorf("too many items for attribute %q; cannot have more than %d", typeName, blockS.MaxItems)
 				}
 				if l == 0 {
@@ -170,7 +170,7 @@ func (b *Block) coerceValue(in cty.Value, path cty.Path) (cty.Value, error) {
 				if l < blockS.MinItems && coll.IsWhollyKnown() {
 					return cty.UnknownVal(b.ImpliedType()), path.NewErrorf("insufficient items for attribute %q; must have at least %d", typeName, blockS.MinItems)
 				}
-				if l > blockS.MaxItems && blockS.MaxItems > 0 {
+				if l > blockS.MaxItems && blockS.MaxItems > 0 && coll.IsWhollyKnown() {
 					return cty.UnknownVal(b.ImpliedType()), path.NewErrorf("too many items for attribute %q; cannot have more than %d", typeName, blockS.MaxItems)
 				}
 				if l == 0 {
